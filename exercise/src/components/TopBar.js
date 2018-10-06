@@ -1,9 +1,13 @@
-import React, {Component} from 'react';
-import {Link} from 'react-router-dom';
-import Button from './Button';
+import React, {Component} from 'react'
+import {Link} from 'react-router-dom'
+import Button from './Button'
+import icon from '../assets/favicon-196x196.png'
 
 export default class TopBar extends Component {
-  state: { loggedIn: false }
+  getUserImage = () => {
+    return localStorage.getItem('user_image')
+  }
+
   render() {
     return (
       <header style={{
@@ -19,7 +23,7 @@ export default class TopBar extends Component {
       >
         <div style={styles.logo}>
           <Link to="/">
-            <img alt={'logo'} style={{ maxHeight: 40, flex: 1}} src="favicon-196x196.png"/>
+            <img alt={'logo'} style={{ maxHeight: 40, flex: 1}} src={icon} />
           </Link>
         </div>
         <div>
@@ -27,11 +31,22 @@ export default class TopBar extends Component {
         </div>
         <div style={{float: 'left', color: 'white', flex: 1}} />
         <div style={{float: 'right', paddingRight: 20}}>
-          <Button style={{backgroundColor: 'blue', color: 'white'}}>Login</Button>
-          <Button style={{backgroundColor: 'red', color: 'white'}}>Signup</Button>
+          {
+            !this.props.isAuth && (
+              <Button style={{backgroundColor: 'blue', color: 'white'}} onClick={this.props.login}>Log In</Button>
+            )
+          }
+          {
+            this.props.isAuth && (
+              <React.Fragment>
+                <img alt={'user'} style={{ maxHeight: 40, flex: 1, borderRadius: '50%'}} src={this.getUserImage()} />
+                <Button style={{backgroundColor: 'blue', color: 'white'}} onClick={this.props.logout}>Log Out</Button>
+              </React.Fragment>
+            )
+          }
         </div>
       </header>
-    );
+    )
   } 
 }
 
@@ -40,5 +55,5 @@ const styles = {
     float:  'left',
     margin: 8
   }
-};
+}
 
